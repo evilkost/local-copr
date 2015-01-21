@@ -1,0 +1,6 @@
+[copr-cli]
+login =Y29wcg==##xvlgutojqwbbtgchimga
+username = test_user
+token =gihbqhuartrdsxjbklfhejsotzvqbd
+copr_url = http://127.0.0.1:80
+

@@ -1,0 +1,25 @@
+---
+# REQUIRE extra_args:
+# - vm_name
+#
+
+- name: terminate instance
+  hosts: vm_builder
+  gather_facts: False
+  user: "{{ builder_user }}"
+
+  vars_files: 
+  - "vars.yml"
+  - "priv_vars.yml"
+
+  tasks:
+  - debug: msg="Box name {{ base_img_name }}"
+
+  - name: destroy VM
+    shell: "vagrant destroy -f"
+    args: 
+      chdir: "{{basedir}}/{{ copr_task.vm_name }}"
+    
+
+  - name: delete VM folder
+    file:  path="{{basedir}}/{{ copr_task.vm_name }}" state=absent

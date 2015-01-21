@@ -1,0 +1,63 @@
+- name: test echo
+  shell: "echo builder_alive"
+
+- name: install pkgs
+  action: yum state=present pkg={{ item }}
+  with_items:
+  - rsync
+  - openssh-clients
+  - libselinux-python
+  - libsemanage-python
+  # - epel-release # uncomment for centos
+
+- name: add repos
+  action: copy src={{ item }} dest=/etc/yum.repos.d/{{ item }}
+  with_items:
+  - builder.repo
+
+- name: install additional pkgs
+  action: yum state=present pkg={{ item }}
+  with_items:
+  - mock
+  - createrepo
+  - yum-utils
+  - pyliblzma
+  - python-pip
+
+#- name: update python.six
+#  pip: name="six" state="latest"
+
+- name: make sure newest rpm
+  action: yum name={{ item }} state=latest
+  #action: yum name={{ item }} state=present
+  with_items:
+  - rpm
+  - glib2
+  - ca-certificates
+    
+# - yum: name=mock  enablerepo=epel-testing state=latest
+
+- name: mockbuilder user   
+  action: user name=mockbuilder groups=mock
+
+- name: mockbuilder .ssh
+  action: file state=directory path=/home/mockbuilder/.ssh mode=0700 owner=mockbuilder group=mockbuilder
+
+- name: mockbuilder authorized_keys
+  authorized_key: user=mockbuilder key='{{ lookup("file", "ssh_keys/id_rsa.pub") }}'
+
+- name: mockbuilder authorized_keys
+  authorized_key: user=root key='{{ lookup("file", "ssh_keys/id_rsa.pub") }}'
+
+  
+- name: put updated mock configs into /etc/mock
+  action: copy src="mock/{{ item }}" dest=/etc/mock
+  with_items:
+  - site-defaults.cfg
+  - epel-5-x86_64.cfg
+  - epel-5-i386.cfg
+  - fedora-20-x86_64.cfg
+  - fedora-20-i386.cfg
+  - epel-7-x86_64.cfg
+
+- lineinfile: dest=/root/.bashrc line="ulimit -n 10240" insertafter=EOF

@@ -1,0 +1,76 @@
+---
+- name: check/create instance
+  hosts: vm_builder
+  gather_facts: False
+  user: "{{ builder_user }}"
+  
+  vars_files:
+  - vars.yml
+  - priv_vars.yml
+  
+  tasks:
+  # TODO: ensure that vagrant & virtualbox are installed
+  
+  #
+  # Build image chech/fetch
+  #
+  - name: check base img box presence
+    shell: "vagrant box list | grep -c {{ base_img_name }}"
+    register: box_present
+    ignore_errors: yes
+
+  - debug: msg="{{ box_present.stdout }}"
+    when: box_present.stdout != "1"
+
+  - name: fetch base box if missed
+    shell: "vagrant box add {{ base_img_name  }} {{ base_img_src_url }}"
+    when: box_present.stdout == "0"
+
+  #
+  # Create VM
+  #
+
+  - name: generate builder name
+    local_action: command echo "builder_{{ 999999999 | random }}"
+    register: vm_name_raw
+
+  - name: fix name
+    set_fact: 
+      vm_name: "{{ vm_name_raw.stdout}}"
+
+  - name: construct folder name
+    set_fact: 
+      vm_folder: "{{basedir}}/{{ vm_name }}"
+
+  - debug: msg="vm_name={{ vm_name }}"
+
+  - name: create vm folder
+    file: state=directory path={{ vm_folder }}
+
+  - name: copy Vagrantfile
+    copy: src="Vagrantfile" dest="{{ vm_folder }}/Vagrantfile"
+
+  #
+  # Run first time
+  #
+
+  - name: run VM
+    # some ssh-related black magic
+    shell: "unset SSH_CLIENT SSH_CONNECTION SSH_AUTH_SOCK && vagrant up"
+    args:
+      chdir: "{{ vm_folder }}"
+    ignore_errors: True
+
+
+  - include: discover_vm_ip_tasks.yml  
+
+  # PROVISIONING
+- name: test provision
+  hosts: builder_temp_group
+  user: vagrant
+  sudo: True
+
+  tasks:
+  - include: provision_tasks.yml
+    when: "{{ do_provision }}"
+

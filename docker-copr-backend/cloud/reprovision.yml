@@ -1,0 +1,23 @@
+---
+- name: discover builder
+  hosts: vm_builder
+  gather_facts: False
+  user: "{{ builder_user }}"
+
+  
+  vars_files:
+  - vars.yml
+  - priv_vars.yml
+  
+  tasks:
+  - include: discover_vm_ip_tasks.yml
+
+
+- name: re provision
+  hosts: builder_temp_group
+  user: vagrant
+  sudo: True
+
+  tasks:
+  - include: provision_tasks.yml
+

@@ -1,0 +1,17 @@
+- name: Get VM ip, check that it's working
+  shell: "vagrant ssh -c 'ip addr show' | grep 'inet ' | awk '{ print $2  }' | grep '^172' | cut -d'/' -f1 > host_ip && cat host_ip"
+  args:
+    chdir: "{{ vm_folder }}"
+
+- name: get host_ip
+  shell: "cat {{ vm_folder }}/host_ip"
+  register: host_ip_raw
+  
+- set_fact:
+    host_ip: "{{ host_ip_raw.stdout }}"
+
+- debug: msg="VM_IP={{host_ip}}"
+
+- name: add it to the special group
+  local_action: add_host hostname={{ host_ip }} groupname=builder_temp_group
+  

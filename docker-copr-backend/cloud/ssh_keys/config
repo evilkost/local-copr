@@ -1,0 +1,13 @@
+
+Host *
+    ControlMaster auto
+    ControlPath /tmp/%r@%h:%p
+    ForwardAgent yes
+    ControlPersist 30m
+    IdentityFile /home/copr/.ssh/id_rsa
+    IdentityFile /home/copr/.ssh/vagrant_insecure_privkey
+
+Host VM_BUILDER_IP
+    IdentityFile /home/copr/.ssh/builder_id_rsa
+
+    
