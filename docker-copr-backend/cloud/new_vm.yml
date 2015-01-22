@@ -70,6 +70,9 @@
   user: vagrant
   sudo: True
 
+  vars_files:
+  - vars.yml
+
   tasks:
   - include: provision_tasks.yml
     when: "{{ do_provision }}"

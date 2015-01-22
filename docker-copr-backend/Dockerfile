@@ -7,32 +7,27 @@ MAINTAINER Valentin Gologuzov <vgologuz@redhat.com>
 
 COPY msuchy-copr-fedora-20.repo /etc/yum.repos.d/
 RUN yum install -y dnf
-RUN dnf install -y fedmsg telnet tmux zsh ipython redis python-pip python-celery python-IPy copr-backend python-novaclient supervisor openssh-server iproute ansible vim --enablerepo=updates --enablerepo=updates-testing
+RUN dnf install -y vim fedmsg fedmsg-relay telnet tmux zsh ipython redis python-pip python-celery python-IPy copr-backend python-novaclient supervisor openssh-server iproute ansible vim --enablerepo=updates --enablerepo=updates-testing
 
+RUN pip install -U six
 
-# enable services
-#RUN systemctl enable redis
-#RUN systemctl start redis copr-backend
+EXPOSE 22 80 443
 
-EXPOSE 22
-EXPOSE 80
-EXPOSE 443
-
+COPY fedmsg/endpoints.py /etc/fedmsg.d/endpoints.py
 COPY supervisord.conf /etc/supervisord.conf
 
 COPY lighttpd/lighttpd.conf /etc/lighttpd/lighttpd.conf
 COPY lighttpd/dirlisting.conf  /etc/lighttpd/conf.d/dirlisting.conf
 COPY lighttpd/mime.conf  /etc/lighttpd/conf.d/mime.conf
 
-COPY cloud/ssh_keys/id_rsa  /home/copr/.ssh/
-COPY  cloud/ssh_keys/vagrant_insecure_privkey /home/copr/.ssh/
 
-# DO: Place your private key here
-COPY builder_id_rsa /home/copr/.ssh/
+# DO: Place your private key to connect to host --> builder_id_rsa
+
+COPY cloud/ssh_keys/config cloud/ssh_keys/id_rsa  cloud/ssh_keys/vagrant_insecure_privkey builder_id_rsa /home/copr/.ssh/
 
 RUN chown -R copr:copr /home/copr/
 
-COPY cloud/ssh_keys/config /home/copr/.ssh/
+
 
 COPY copr-be.conf /etc/copr/copr-be.conf
 COPY cloud /home/copr/provision/
