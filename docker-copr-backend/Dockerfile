@@ -7,7 +7,7 @@ MAINTAINER Valentin Gologuzov <vgologuz@redhat.com>
 
 COPY msuchy-copr-fedora-20.repo /etc/yum.repos.d/
 RUN yum install -y dnf
-RUN dnf install -y vim fedmsg fedmsg-relay telnet tmux zsh ipython redis python-pip python-celery python-IPy copr-backend python-novaclient supervisor openssh-server iproute ansible vim --enablerepo=updates --enablerepo=updates-testing
+RUN dnf install -y vim hostname fedmsg fedmsg-relay telnet tmux zsh ipython redis python-pip python-celery python-IPy copr-backend python-novaclient supervisor openssh-server iproute ansible vim --enablerepo=updates --enablerepo=updates-testing
 
 RUN pip install -U six
 

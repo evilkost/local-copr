@@ -4,6 +4,9 @@ rm -f /var/run/copr-backend/copr-be.pid
 rm -f /var/run/copr-backend/copr-be.pid.lock
 
 
+sed -i "s/REPLACEHOSTNAME/`hostname`/" /etc/fedmsg.d/endpoints.py
+
+
 if [ -e /opt/shared_ro/update_back_to ]
 then
     rpm_file=$(cat /opt/shared_ro/update_back_to)
@@ -15,4 +18,3 @@ fi
 
 
 /usr/bin/supervisord -n
-
