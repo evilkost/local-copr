@@ -3,11 +3,9 @@ MAINTAINER Valentin Gologuzov <vgologuz@redhat.com>
 
 RUN yum install -y copr-frontend copr-selinux copr-cli postgresql-server postgresql-contrib supervisor openssh-server wget
 
-COPY copr-frontend.rpm /tmp/copr-frontend.rpm
-RUN yum localinstall -y /tmp/copr-frontend.rpm
 
-ENV LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8 TERM=xterm
-RUN locale-gen $LC_ALL
+#ENV LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8 TERM=xterm
+#RUN locale-gen $LC_ALL
 
 EXPOSE 80 1080
 

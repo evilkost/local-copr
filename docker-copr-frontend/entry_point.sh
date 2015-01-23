@@ -1,5 +1,7 @@
 #!/usr/bin/sh
 
+rm -f /var/run/httpd/httpd.pid
+
 if [ -e /opt/shared_ro/update_front_to ]
 then
     rpm_file=$(cat /opt/shared_ro/update_front_to)
