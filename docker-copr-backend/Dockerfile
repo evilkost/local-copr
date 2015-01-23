@@ -7,9 +7,9 @@ MAINTAINER Valentin Gologuzov <vgologuz@redhat.com>
 
 COPY msuchy-copr-fedora-20.repo /etc/yum.repos.d/
 RUN yum install -y dnf
-RUN dnf install -y vim hostname fedmsg fedmsg-relay telnet tmux zsh ipython redis python-pip python-celery python-IPy copr-backend python-novaclient supervisor openssh-server iproute ansible vim --enablerepo=updates --enablerepo=updates-testing
+RUN dnf install -y python-psutil vim hostname fedmsg fedmsg-relay telnet tmux zsh redis python-pip python-celery python-IPy copr-backend python-novaclient supervisor openssh-server iproute ansible vim tree less --enablerepo=updates --enablerepo=updates-testing
 
-RUN pip install -U six
+RUN pip install -U six ipython
 
 EXPOSE 22 80 443
 
@@ -43,6 +43,6 @@ COPY run_cb.sh /usr/bin/run_cb.sh
 RUN chmod +x /usr/bin/run_cb.sh
 
 COPY entry_point.sh /usr/bin/entry_point.sh
-
+COPY redis.conf /etc/redis.conf
 CMD ["/usr/bin/entry_point.sh"]
 

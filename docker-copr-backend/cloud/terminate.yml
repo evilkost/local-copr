@@ -19,7 +19,8 @@
     shell: "vagrant destroy -f"
     args: 
       chdir: "{{basedir}}/{{ copr_task.vm_name }}"
-    
+    ignore_errors: yes
 
   - name: delete VM folder
     file:  path="{{basedir}}/{{ copr_task.vm_name }}" state=absent
+    ignore_errors: yes

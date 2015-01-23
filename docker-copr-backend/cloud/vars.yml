@@ -7,4 +7,4 @@ base_img_src_url: "file:///srv/vg/f20_builder.box"
 # base_img_name: "builder_vm_f20"
 base_img_name: "f20_builder"
 
-do_provision: true  # set false when vagrant image was created from provisioned instance
+do_provision: false  # set false when vagrant image was created from provisioned instance
