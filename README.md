@@ -35,20 +35,20 @@ Common
 Front
 -----
 
-- `cd docker-copr-backend`
+- `cd docker-copr-frontend`
 - build docker image using command:
 
-    `docker build -t test_front `
+    `./rebuild.sh`
 
 
-- run `front` using script `docker-copr-frontend/run_frontend.sh`
+- run `front` using script `./run_frontend.sh`
 - you should be able to see Copr running in browser at `http://front.test`
 
 Back & VM provider
 ------------------
 
 - `cd docker-copr-backend`
-- generate ssh keypair, so that builder could ssh to the host, copy private key to `builder_id_rsa`
+- generate ssh keypair, so that builder could ssh to the host, save private key as `./builder_id_rsa`
 - [ - replace `cloud/ssh_keys/vagrant_insecure_privkey` if it was changed by vagrant or your distribution]
 - do `cp cloud/priv_vars.yml{.example,}` and replace username with $USER
 - edit `cloud/vars.yml` to select vagrant source boxes.
@@ -57,16 +57,16 @@ If you changed variable `base_img_name` update line `  config.vm.box = "f20_buil
 
 - build docker image using command:
 
-    `docker build -t test_back`
+    `./rebuild.sh`
 
-
+- run `back` using script `./run_backend.sh`
 - `back` should be able to process builds
 
 Notes
 =====
 
 I was forced to disable SELinux on host, it prevented ssh connection from docker to host/builder VM.
-Troubleshooting tool was unable to generate semodule to allow such connection. 
+Troubleshooting tool was unable to generate semodule to allow such connection.
 If somebody has ideas how to fix it and re-enable SELinux please ping me.
 
 
