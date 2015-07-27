@@ -67,8 +67,8 @@
   # PROVISIONING
 - name: test provision
   hosts: builder_temp_group
-  user: vagrant
-  sudo: True
+  #user: vagrant
+  #sudo: True
 
   vars_files:
   - vars.yml
@@ -76,4 +76,4 @@
   tasks:
   - include: provision_tasks.yml
     when: "{{ do_provision }}"
-
+  - copy: src="site-defaults.cfg" dest="/etc/mock/site-defaults.cfg"

@@ -1,7 +1,7 @@
-FROM fedora:21
+FROM fedora:22
 MAINTAINER Valentin Gologuzov <vgologuz@redhat.com>
 
-RUN yum install -y dnf dnf-plugins-core  --enablerepo=updates --enablerepo=updates-testing && \
+RUN dnf install -y dnf-plugins-core  --enablerepo=updates --enablerepo=updates-testing && \
     dnf copr enable msuchy/copr -y && \
     dnf install -y less vim tree copr-frontend copr-selinux copr-cli postgresql-server postgresql-contrib supervisor openssh-server wget \
        telnet python-celery tmux python-dateutil python-netaddr net-tools python-pip redis python-redis && \
@@ -14,7 +14,7 @@ RUN yum install -y dnf dnf-plugins-core  --enablerepo=updates --enablerepo=updat
 
 #ENV LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8 TERM=xterm
 #RUN locale-gen $LC_ALL
-RUN localedef -v -c -i en_US -f UTF-8 en_US.UTF-8
+# RUN localedef -v -c -i en_US -f UTF-8 en_US.UTF-8
 EXPOSE 80 1080
 
 

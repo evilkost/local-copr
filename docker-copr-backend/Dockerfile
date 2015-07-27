@@ -1,4 +1,4 @@
-FROM fedora:21
+FROM fedora:22
 MAINTAINER Valentin Gologuzov <vgologuz@redhat.com>
 
 #ENV LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8 TERM=xterm
@@ -6,10 +6,14 @@ MAINTAINER Valentin Gologuzov <vgologuz@redhat.com>
 
 
 COPY msuchy-copr-fedora-20.repo /etc/yum.repos.d/
-RUN yum install -y dnf
-RUN dnf install -y python-psutil vim hostname fedmsg fedmsg-relay telnet tmux zsh redis python-pip python-celery python-IPy copr-backend python-novaclient supervisor openssh-server iproute ansible vim tree less --enablerepo=updates --enablerepo=updates-testing
+RUN dnf install -y libappstream-glib-builder  python-psutil vim hostname \
+    /usr/bin/ps \
+    fedmsg fedmsg-relay telnet tmux zsh redis python-pip python-celery \
+    python-IPy python-novaclient supervisor openssh-server \
+    iproute ansible vim tree less --enablerepo=updates --enablerepo=updates-testing
 
 RUN pip install -U six ipython
+RUN dnf install -y copr-backend
 
 EXPOSE 22 80 443
 
